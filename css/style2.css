@@ -1,0 +1,45 @@
+h1{
+    text-align: center;
+}
+nav{
+    background-color: #bababa;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+}
+footer{
+    background-color: #bababa; 
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+}
+div{
+    height: 580px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+}
+body{
+    background-image: url(../img/images.png);
+    background-repeat: no-repeat;
+    background-size: cover;
+  
+}
+img{
+    height: 800px;
+}
+h1{
+    color: rgb(0, 0, 0);
+}
+p{
+    color: aliceblue;
+}
+footer{
+    height: 200px;
+    display: flex;
+    width: auto;
+    height: auto;
+}
