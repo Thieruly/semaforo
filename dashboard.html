@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard Fila de Trânsito</title>
+    <link rel="stylesheet" href="css/folha.css">
+</head>
+
+<body>
+    <nav>
+        <h1>Dashboard Fila de Trânsito</h1>
+    </nav>
+
+    <div id="statusContainer">
+        <img id="statusImage" src="" alt="Status da Fila de Trânsito">
+        <p id="statusText"></p>
+    </div>
+    <div id="filaTransito"></div>
+
+    <script>
+        function carregarImagem(status) {
+            const statusText = document.getElementById('statusText');
+            const statusImage = document.getElementById('statusImage');
+
+            switch (status) {
+                case 'A':
+                    statusText.textContent = 'Aguardando...';
+                    statusImage.src = 'img/aguarde.png';
+                    break;
+                case 'B':
+                    statusText.textContent = 'Bloqueado. Aguarde!';
+                    statusImage.src = 'img/bloqueio.png';
+                    break;
+                case 'L':
+                    statusText.textContent = 'Liberado para saída!';
+                    statusImage.src = 'img/liberar.png';
+                    break;
+                default:
+                    statusText.textContent = 'Status desconhecido';
+                    statusImage.src = '';
+            }
+        }
+
+        function carregarFilaTransito() {
+            fetch('https://niloweb.com.br/transit-room/api/reg_endpoint_all.php')
+                .then(response => response.json())
+                .then(data => {
+                    const filaTransito = document.getElementById('filaTransito');
+                    filaTransito.innerHTML = '';
+
+                    if (data.length > 0) {
+                        const tabela = document.createElement('table');
+                        tabela.classList.add('tabela-fila');
+
+                        
+                        const cabecalho = tabela.createTHead();
+                        const cabecalhoRow = cabecalho.insertRow();
+                        cabecalhoRow.innerHTML = '<th>Status</th><th>Dia</th><th>Nome</th><th>Sobrenome</th><th>Hora</th><th>Data</th><th>Motivo</th>';
+
+                        data.forEach(registro => {
+                            const linha = tabela.insertRow();
+                            linha.innerHTML = `<td>${registro.res}</td><td>${registro.dia}</td><td>${registro.nome}</td><td>${registro.sobrenome}</td><td>${registro.hora}</td><td>${registro.data}</td><td>${registro.motivo}</td>`;
+                            linha.classList.add('filaTransito');
+                            linha.setAttribute('data-estado', registro.res);
+
+                            carregarImagem(registro.res);
+                        });
+
+                        filaTransito.appendChild(tabela);
+                    } else {
+                        filaTransito.textContent = 'Não há registros na fila de trânsito.';
+                    }
+                })
+                .catch(error => {
+                    console.error('Erro ao conectar à API:', error);
+                });
+        }
+
+        window.onload = function () {
+            carregarFilaTransito();
+        };
+    </script>
+</body>
+
+</html>

@@ -70,7 +70,7 @@
     </div>
 
     <div id="emojiContainer"></div>
-
+    <div id="fila-transito" class="lista-transito">
     <script>
         function carregarImagem() {
             fetch('https://niloweb.com.br/transit-room/api/reg_endpoint.php')
@@ -109,14 +109,48 @@
                  
           
         }
+      
+
+        function carregarFilaTransito() {
+            fetch('https://niloweb.com.br/transit-room/api/reg_endpoint_all.php')
+                .then(response => response.json())
+                .then(data => {
+                    const listaTransito = document.getElementById('fila-transito');
+                    listaTransito.innerHTML = '';
+                   
+                    if (data && data.length > 0) {
+                        data.forEach(item => {
+                            const listItem = document.createElement('div');
+                            listItem.classList.add('item-transito');
+                            listItem.innerHTML = `
+                                <div><strong>Resultado:</strong> ${item.res}</div>
+                                <div><strong>Dia:</strong> ${item.dia}</div>
+                                <div><strong>Nome Completo:</strong> ${item.nome} ${item.sobrenome}</div>
+                                <div><strong>Hora:</strong> ${item.hora}</div>
+                                <div><strong>Data:</strong> ${item.data}</div>
+                                <div><strong>Motivo:</strong> ${item.motivo}</div>
+                                <hr> <!-- Adiciona uma linha divisória entre os itens -->
+                            `;
+                            listaTransito.appendChild(listItem);
+                        });
+                    } else {
+                        listaTransito.innerHTML = '<p>Não há dados disponíveis</p>';
+                    }
+                })
+                .catch(error => {
+                    console.error('Erro ao carregar dados da fila de trânsito:', error);
+                });
+        }
+ 
+
 
         function criarEmoji() {
             const emoji = document.createElement('span');
             emoji.innerHTML = '🍓';
             emoji.className = 'emoji';
-            emoji.style.left = Math.random() * 100 + 'vw'; // Posição horizontal aleatória
-            emoji.style.top = Math.random() * 100 + 'vh'; // Posição vertical aleatória
-            emoji.style.animationDuration = (Math.random() * 10 + 5) + 's'; // Duração de animação aleatória entre 5s e 15s
+            emoji.style.left = Math.random() * 100 + 'vw'; 
+            emoji.style.top = Math.random() * 100 + 'vh'; 
+            emoji.style.animationDuration = (Math.random() * 10 + 5) + 's'; 
             document.getElementById('emojiContainer').appendChild(emoji);
         }
 
@@ -127,8 +161,8 @@
         }
 
         window.onload = function () {
-            carregarImagem(); // Carregar imagem da API
-            gerarEmojis(100); // Gerar cerca de 100 emojis de morangos
+            carregarImagem(); 
+            gerarEmojis(100); 
         };
 
     
@@ -141,6 +175,5 @@
     <footer >
         <p></p>
     </footer>
-</body>
 
 </html>
